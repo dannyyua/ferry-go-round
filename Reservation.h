@@ -7,7 +7,7 @@
 //                   creating, cancelling, and validating.
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/07 - Generated for Group 15
+//   Rev. 1.0 - 2025/07/07
 // *)
 //******************************************************************
 #ifndef RESERVATION_H
@@ -18,7 +18,7 @@
 // The Reservation namespace acts as a static class for managing Reservation data.
 namespace Reservation {
     //-----------
-    void init();
+    void initialize();
     //-----------
     void shutdown();
 
