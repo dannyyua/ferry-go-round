@@ -9,7 +9,7 @@
 //                   declaration of the controller's public interface.
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/07 - Generated for Group 15
+//   Rev. 1.0 - 2025/07/07
 // *)
 //******************************************************************
 #ifndef CONTROLLER_H
@@ -23,7 +23,7 @@ namespace Controller {
 
     // --- System Lifecycle Functions (from Start-up/Shutdown OCDs) ---
     //-----------
-    void init();    // Initializes all lower-level modules and connects to the DB.
+    void initialize();    // Initializes all lower-level modules and connects to the DB.
     //-----------
     void shutdown(); // Shuts down all lower-level modules and disconnects from the DB.
 
