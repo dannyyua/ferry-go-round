@@ -17,10 +17,6 @@
 
 // The Printer namespace provides an interface to the system's printing hardware.
 namespace Printer {
-    //-----------
-    void init();
-    //-----------
-    void shutdown();
 
     //-----------
     // Corresponds to OCD "printSailingReport()".
