@@ -8,7 +8,7 @@
 //                   the vehicle "database table".
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/07 - Generated for Group 15
+//   Rev. 1.0 - 2025/07/07
 // *)
 //******************************************************************
 #ifndef VEHICLE_H
@@ -19,7 +19,7 @@
 // The Vehicle namespace acts as a static class for managing Vehicle data.
 namespace Vehicle {
     //-----------
-    void init(); // Initializes the vehicle data source.
+    void initialize(); // Initializes the vehicle data source.
     //-----------
     void shutdown(); // Shuts down the vehicle data source.
 
