@@ -17,8 +17,6 @@
 
 // The Printer namespace provides an interface to the system's printing hardware.
 namespace Printer {
-
-    //-----------
     // Corresponds to OCD "printSailingReport()".
     // Sends the provided report content to the system's printer.
     void printSailingReport(const std::string& reportContent);
