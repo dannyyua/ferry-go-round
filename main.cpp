@@ -45,7 +45,6 @@ void initializeSystem() {
     Sailing::initialize();
     Reservation::initialize();
     Vehicle::initialize();
-    Printer::initialize();
     Controller::initialize();
     
     
@@ -60,7 +59,6 @@ void shutdownSystem() {
     Reservation::shutdown();
     Sailing::shutdown();
     Vessel::shutdown();
-    Printer::shutdown();
     Controller::shutdown();
 
     
