@@ -10,6 +10,7 @@
 //
 // (* Revision History:
 //   Rev. 1.0 - 2025/07/07
+//   Rev. 1.1 - 2025/07/08 Add validation functions
 // *)
 //******************************************************************
 #ifndef CONTROLLER_H
@@ -27,6 +28,15 @@ namespace Controller {
     //-----------
     void shutdown(); // Shuts down all lower-level modules and disconnects from the DB.
 
+    // --- Validation/Check Functions (Called by UI before other actions) ---
+    //-----------
+    bool checkVesselExists(const std::string& vesselID);
+    //-----------
+    bool checkSailingExists(const std::string& sailingID);
+    //-----------
+    bool checkReservationExists(const std::string& vehiclePlate);
+    //-----------
+    bool checkVehicleExists(const std::string& vehiclePlate);
 
     // --- Use Case Functions (from specific OCDs) ---
     //-----------
