@@ -8,6 +8,7 @@
 //
 // (* Revision History:
 //   Rev. 1.0 - 2025/07/07
+//   Rev. 1.1 - 2025/07/08 Add 3 Capacity functions (check if exist, decrease capacity, increase capacity)
 // *)
 //******************************************************************
 #ifndef SAILING_H
@@ -22,6 +23,16 @@ namespace Sailing {
     void initialize();
     //-----------
     void shutdown();
+
+    //-----------
+    // Corresponds to Sailing management from OCD"
+    bool hasCapacity(const std::string& sailingID, float requiredLength);
+    //-----------
+    // Decrease in lane capacity
+    void decreaseLRL(const std::string& sailingID, float length);
+    //-----------
+    // Increase in lane capacity
+    void increaseLRL(const std::string& sailingID, float length);
 
     //-----------
     // Corresponds to OCD "createSailing()".
