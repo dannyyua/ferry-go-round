@@ -7,7 +7,7 @@
 //                   the underlying data source.
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/07 - Generated for Group 15
+//   Rev. 1.0 - 2025/07/07
 // *)
 //******************************************************************
 #ifndef SAILING_H
@@ -19,7 +19,7 @@
 // The Sailing namespace acts as a static class for managing Sailing data.
 namespace Sailing {
     //-----------
-    void init();
+    void initialize();
     //-----------
     void shutdown();
 
