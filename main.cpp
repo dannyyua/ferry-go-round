@@ -2,6 +2,7 @@
 // main.cpp
 // Ferry System Main Controller
 // Version 1.0 (2025-07-07)
+// Version 1.1 (2025-07-08) - Fixed function names
 //*******************************
 
 #include <iostream>
@@ -24,7 +25,7 @@ int main() {
         initializeSystem();
         
         // Start main application loop
-        UserInterface::runMainMenu();
+        UserInterface::begin_input();
         
         // System cleanup
         shutdownSystem();
