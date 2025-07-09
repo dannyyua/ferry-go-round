@@ -34,6 +34,12 @@ namespace Sailing {
     //-----------
     // Increase in lane capacity
     void increaseLRL(const std::string& sailingID, float length);
+    //-----------
+    // Decrease in lane capacity
+    void decreaseHRL(const std::string& sailingID, float length);
+    //-----------
+    // Increase in lane capacity
+    void increaseHRL(const std::string& sailingID, float length);
 
     //-----------
     // Corresponds to OCD "createSailing()".
