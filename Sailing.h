@@ -8,7 +8,8 @@
 //
 // (* Revision History:
 //   Rev. 1.0 - 2025/07/07
-//   Rev. 1.1 - 2025/07/08 Add 3 Capacity functions (check if exist, decrease capacity, increase capacity)
+//   Rev. 1.1 - 2025/07/08 
+//     - Add 3 Capacity functions (check if exist, decrease capacity, increase capacity)
 // *)
 //******************************************************************
 #ifndef SAILING_H
