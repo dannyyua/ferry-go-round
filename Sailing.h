@@ -21,7 +21,7 @@
 // The Sailing namespace acts as a static class for managing Sailing data.
 namespace Sailing {
     //-----------
-    void initialize();
+    void init();
     //-----------
     void shutdown();
 
