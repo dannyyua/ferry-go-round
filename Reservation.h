@@ -31,8 +31,8 @@ namespace Reservation {
     void cancelReservation(const std::string& sailingID, const std::string& vehiclePlate);
 
     //-----------
-    // Corresponds to OCD "deleteReservation()".
-    void deleteReservation(const std::string& sailingID);
+    // Corresponds to OCD "deleteReservations()".
+    void deleteReservations(const std::string& sailingID);
     
     //-----------
     // Corresponds to OCD "isValidReservation()".
