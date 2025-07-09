@@ -25,7 +25,7 @@ namespace Controller {
 
     // --- System Lifecycle Functions (from Start-up/Shutdown OCDs) ---
     //-----------
-    void initialize();    // Initializes all lower-level modules and connects to the DB.
+    void init();    // Initializes all lower-level modules and connects to the DB.
     //-----------
     void shutdown(); // Shuts down all lower-level modules and disconnects from the DB.
 
