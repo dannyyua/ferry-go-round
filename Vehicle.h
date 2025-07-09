@@ -19,7 +19,7 @@
 // The Vehicle namespace acts as a static class for managing Vehicle data.
 namespace Vehicle {
     //-----------
-    void initialize(); // Initializes the vehicle data source.
+    void init(); // Initializes the vehicle data source.
     //-----------
     void shutdown(); // Shuts down the vehicle data source.
 
