@@ -19,7 +19,7 @@
 // The Vessel namespace acts as a static class for managing Vessel data.
 namespace Vessel {
     //-----------
-    void initialize(); // Initializes the vessel data source.
+    void init(); // Initializes the vessel data source.
     //-----------
     void shutdown(); // Shuts down the vessel data source.
 
