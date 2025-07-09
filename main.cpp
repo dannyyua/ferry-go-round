@@ -1,9 +1,9 @@
 //*******************************
 // main.cpp
 // Ferry System Main Controller
-// Rev 1.0 2025-07-07 (Frank)
+// Rev 1.0 2025-07-07 
 //   - Initial implementation
-// Rev 1.1 2025-07-08 (Frank, Thang)
+// Rev 1.1 2025-07-08 
 //   - Fixed function names, remove printer::shutdown()
 //*******************************
 
@@ -86,9 +86,9 @@ void shutdownSystem() {
  * 
  * 3. VERSION HISTORY
  *    - Maintain at top of .cpp files, latest first:
- *    // Rev 1.0 - 2025-07-07 (Thang)
+ *    // Rev 1.0 - 2025-07-07
  *    //   - Fixed initialization bug in shutdown sequence
- *    // Rev 1.1 - 2025-07-08 (Frank)
+ *    // Rev 1.1 - 2025-07-08 
  *    //   - Initial implementation
  * 
  * 4. FUNCTION DECLARATIONS
