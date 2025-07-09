@@ -10,7 +10,8 @@
 //
 // (* Revision History:
 //   Rev. 1.0 - 2025/07/07
-//   Rev. 1.1 - 2025/07/08 Add validation functions
+//   Rev. 1.1 - 2025/07/08 
+//      - Add validation functions
 // *)
 //******************************************************************
 #ifndef CONTROLLER_H
