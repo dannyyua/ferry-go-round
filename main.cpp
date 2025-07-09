@@ -2,10 +2,10 @@
 //*******************************
 // Ferry System Main Controller
 // (* Revision History:
-//     Rev 1.0 2025-07-07 
-//       - Initial implementation
-//     Rev 1.1 2025-07-08 
-//       - Fixed function names, remove printer::shutdown()
+//   Rev 1.0 2025-07-07 
+//     - Initial implementation
+//   Rev 1.1 2025-07-08 
+//     - Fixed function names, remove printer::shutdown()
 // *)
 //*******************************
 
