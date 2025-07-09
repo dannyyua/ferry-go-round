@@ -46,11 +46,11 @@ void initializeSystem() {
     std::cout << "Initializing system." << std::endl;
     
     // Initialize all persistent data files
-    Vessel::initialize();
-    Sailing::initialize();
-    Reservation::initialize();
-    Vehicle::initialize();
-    Controller::initialize();
+    Vessel::init();
+    Sailing::init();
+    Reservation::init();
+    Vehicle::init();
+    Controller::init();
     
     
     std::cout << "System initialization complete." << std::endl;
