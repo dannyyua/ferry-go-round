@@ -71,7 +71,7 @@ void shutdownSystem() {
 }
 
 /* ========================================================================
- * TEAM CODING CONVENTION (Last updated: 2025-07-07)
+ * TEAM CODING CONVENTION (Last updated: 2025-07-22)
  * 
  * 1. FILE ORGANIZATION
  *    - Header files (.h) contain only declarations and inline functions
@@ -82,8 +82,10 @@ void shutdownSystem() {
  *    Each file must start with:
  *    //*******************************
  *    // FileName.h or FileName.cpp
+ *    // 
  *    // Brief description
- *    // Version x.y (YYYY-MM-DD)
+ *    //
+ *    // Version history (shown below)
  *    //*******************************
  * 
  * 3. VERSION HISTORY
