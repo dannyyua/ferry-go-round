@@ -29,7 +29,7 @@ const int RECORD_SIZE = sizeof(VehicleRecord);
 
 static fstream vehicleFile; // Persistent file handle
 
-void Vehicle::initialize() {
+void Vehicle::init() {
     // Open or create file in binary read/write mode
     vehicleFile.open(VEHICLE_FILE, 
                     ios::in | ios::out | ios::binary | ios::app);
