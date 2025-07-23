@@ -76,7 +76,7 @@ static void truncateFile(const char* filename, streampos size) {
     #endif
 }
 
-void Reservation::initialize() {
+void Reservation::init() {
     // PURPOSE: Open persistent connection to reservation data file
     // Opens or creates file in binary read/write mode
     resFile.open(RESERVATION_FILE, 
