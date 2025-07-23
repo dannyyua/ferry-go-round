@@ -18,7 +18,7 @@
 // The Reservation namespace acts as a static class for managing Reservation data.
 namespace Reservation {
     //-----------
-    void init();
+    void initialize();
     //-----------
     void shutdown();
 
