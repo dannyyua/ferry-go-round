@@ -12,12 +12,18 @@
 //   Rev. 1.0 - 2025/07/07
 //   Rev. 1.1 - 2025/07/08 
 //      - Add validation functions
+//   Rev. 1.2 - 2025/07/22
+//      - Add data retrieval functions, update some function parameters
 // *)
 //******************************************************************
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
 #include <string>
+#include "Sailing.h"
+#include "Vessel.h"
+#include "Vehicle.h"
+#include "Reservation.h"
 
 // The Controller namespace encapsulates all central application logic,
 // making it a global, static class that doesn't need to be instantiated.
@@ -39,13 +45,25 @@ namespace Controller {
     //-----------
     bool checkVehicleExists(const std::string& vehiclePlate);
 
+    // --- Data Retrieval Functions (for displaying info in the UI) ---
+    //-----------
+    Vessel::VesselEntity getVessel(const std::string& vesselID);
+    //-----------
+    Sailing::SailingEntity getSailing(const std::string& sailingID);
+    //-----------
+    Reservation::ReservationEntity getReservation(const std::string& vehiclePlate);
+    //-----------
+    Vehicle::VehicleEntity getVehicle(const std::string& vehiclePlate);
+
     // --- Use Case Functions (from specific OCDs) ---
     //-----------
-    void createNewVessel(const std::string& vesselInfo);
+    void createNewVessel(const std::string& vesselID, double LCLL, double HCLL);
     //-----------
-    void createNewSailing(const std::string& vesselID, const std::string& sailingInfo);
+    void createNewSailing(const std::string& vesselID, const std::string& sailingID);
     //-----------
-    void createNewReservation(const std::string& sailingID, const std::string& vehiclePlate, const std::string& customerPhone);
+    void createNewReservation(const std::string& sailingID, const std::string& vehiclePlate);
+    //-----------
+    void createNewVehicle(const std::string& vehiclePlate, const std::string& phoneNumber, double length, double height);
     //-----------
     void cancelReservation(const std::string& sailingID, const std::string& vehiclePlate);
     //-----------
@@ -56,9 +74,9 @@ namespace Controller {
     
     // --- Query and Report Functions ---
     //-----------
-    void getSailingReport(); // Simplified to just trigger the report process
+    std::vector<Sailing::SailingEntity> getSailingReport(int offset);
     //-----------
-    void queryIndividualSailing(const std::string& sailingID);
+    Sailing::SailingEntity queryIndividualSailing(const std::string& sailingID);
     //-----------
     void printSailingReport();
 }

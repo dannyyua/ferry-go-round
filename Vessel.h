@@ -15,9 +15,21 @@
 #define VESSEL_H
 
 #include <string>
+#include <optional>
 
 // The Vessel namespace acts as a static class for managing Vessel data.
 namespace Vessel {
+    // Domain entity representing a Vessel.
+    struct VesselEntity {
+        std::string vesselID;
+        double LCLL;
+        double HCLL;
+
+        bool operator==(const VesselEntity& other) const {
+            return vesselID == other.vesselID;
+        }
+    };
+
     //-----------
     void init(); // Initializes the vessel data source.
     //-----------
@@ -25,8 +37,13 @@ namespace Vessel {
 
     //-----------
     // Corresponds to OCD "createVessel()".
-    // In a real implementation, vesselInfo would be a struct.
-    void createVessel(const std::string& vesselInfo);
+    // Creates a new vessel record in the database.
+    void createVessel(const std::string& vesselID, double LCLL, double HCLL);
+
+    //-----------
+    // Corresponds to OCD "getVessel()".
+    // Retrieves a vessel record by its ID.
+    std::optional<VesselEntity> getVessel(const std::string& vesselID);
 
     //-----------
     // Corresponds to OCD "isValidVessel()".
