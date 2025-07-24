@@ -30,17 +30,12 @@ void Reservation::init() {}
 
 void Reservation::shutdown() {}
 
-void Reservation::createReservation(const std::string& reservationInfo) {
-    // Parse reservation info
-    size_t pos = reservationInfo.find(',');
-    std::string sailID = reservationInfo.substr(0, pos);
-    std::string plate = reservationInfo.substr(pos + 1);
-    
+void Reservation::createReservation(const std::string& sailingID, const std::string& vehiclePlate) {
     // Create entity
     ReservationEntity newEntity;
     memset(&newEntity, 0, sizeof(ReservationEntity));
-    strncpy(newEntity.sailingID, sailID.c_str(), 20);
-    strncpy(newEntity.vehiclePlate, plate.c_str(), 20);
+    strncpy(newEntity.sailingID, sailingID.c_str(), 20);
+    strncpy(newEntity.vehiclePlate, vehiclePlate.c_str(), 20);
     newEntity.checkedIn = false;
     
     // Create record via Utility

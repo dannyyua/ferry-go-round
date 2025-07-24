@@ -43,7 +43,7 @@ namespace Reservation {
     void shutdown();
     //-----------
     // Corresponds to OCD "createReservation()".
-    void createReservation(const std::string& reservationInfo);
+    void createReservation(const std::string& sailingID, const std::string& vehiclePlate);
     //-----------
     // Corresponds to OCD "cancelReservation()".
     void cancelReservation(const std::string& sailingID, const std::string& vehiclePlate);
