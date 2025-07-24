@@ -10,12 +10,15 @@
 //   Rev. 1.0 - 2025/07/07
 //   Rev. 1.1 - 2025/07/23
 //     - Refactored to use Utility functions for CRUD operations
+//   Rev. 1.2 - 2025/07/23
+//     - Added getReservation function
 // *)
 //******************************************************************
 #ifndef RESERVATION_H
 #define RESERVATION_H
 
 #include <string>
+#include <optional>
 #include "Utility.h"
 
 namespace Reservation {
@@ -53,6 +56,9 @@ namespace Reservation {
     //-----------
     // Corresponds to OCD "checkIn()".
     void checkIn(const std::string& vehiclePlate);
+    //-----------
+    // New function to retrieve a reservation by vehicle plate
+    std::optional<ReservationEntity> getReservation(const std::string& vehiclePlate);
 }
 
 #endif // RESERVATION_H

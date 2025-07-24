@@ -105,3 +105,17 @@ std::string Vehicle::getVehiclePhone(const std::string& vehiclePlate) {
     }
     throw std::runtime_error("Vehicle not found: " + vehiclePlate);
 }
+
+std::optional<VehicleEntity> Vehicle::getVehicle(const std::string& vehiclePlate){
+    int position = 0;
+    while (true) {
+        auto record = readRecord<VehicleEntity>(position);
+        if (!record.has_value()) break;
+
+        if (strcmp(record->plate, vehiclePlate.c_str()) == 0) {
+            return record;
+        }
+        position++;
+    }
+    return std::nullopt;
+}

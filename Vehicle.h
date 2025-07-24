@@ -54,6 +54,8 @@ namespace Vehicle {
     double getVehicleHeight(const std::string& vehiclePlate);
     //-----------
     std::string getVehiclePhone(const std::string& vehiclePlate);
+    //-----------
+    std::optional<VehicleEntity> getVehicle(const std::string& vehiclePlate);
 }
 
 #endif // VEHICLE_H

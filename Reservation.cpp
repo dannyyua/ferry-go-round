@@ -13,12 +13,13 @@
 //   Rev. 1.0 - 2025/07/22
 //   Rev. 1.1 - 2025/07/23
 //     - Refactored to use Utility functions for CRUD operations
+//   Rev. 1.2 - 2025/07/23
+//     - Added getReservation function implementation
 // *)
 //******************************************************************
 #include "Reservation.h"
 #include <cstring>
 #include <vector>
-#include <stdexcept>
 
 using namespace Reservation;
 using namespace Utility;
@@ -32,16 +33,8 @@ void Reservation::shutdown() {}
 void Reservation::createReservation(const std::string& reservationInfo) {
     // Parse reservation info
     size_t pos = reservationInfo.find(',');
-    if (pos == std::string::npos) {
-        throw std::invalid_argument("Invalid reservation info format");
-    }
     std::string sailID = reservationInfo.substr(0, pos);
     std::string plate = reservationInfo.substr(pos + 1);
-    
-    // Validate input lengths
-    if (sailID.length() > 20 || plate.length() > 20) {
-        throw std::invalid_argument("Sailing ID or vehicle plate exceeds maximum length");
-    }
     
     // Create entity
     ReservationEntity newEntity;
@@ -116,4 +109,19 @@ void Reservation::checkIn(const std::string& vehiclePlate) {
         }
         position++;
     }
+}
+
+// New function implementation to retrieve a reservation by vehicle plate
+std::optional<ReservationEntity> Reservation::getReservation(const std::string& vehiclePlate) {
+    int position = 0;
+    while (true) {
+        auto record = readRecord<ReservationEntity>(position);
+        if (!record.has_value()) break;
+        
+        if (strcmp(record->vehiclePlate, vehiclePlate.c_str()) == 0) {
+            return record;
+        }
+        position++;
+    }
+    return {};
 }
