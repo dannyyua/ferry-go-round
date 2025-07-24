@@ -1,4 +1,4 @@
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+// Sailing.cpp (FINAL CORRECTED VERSION)
 //******************************************************************
 // IMPLEMENTATION FILE: Sailing
 //
@@ -6,7 +6,8 @@
 //                   generic CRUD functions in the Utility module.
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/23 - Final implementation using Utility module
+//   Rev. 1.1 - 2025/07/23 - Corrected calls to Utility functions to use position.
+//   Rev. 1.0 - 2025/07/07 - Initial implementation.
 // *)
 //******************************************************************
 #include "Sailing.h"
@@ -17,83 +18,78 @@
 #include <vector>
 #include <optional>
 
-// This file implements the functions declared in Sailing.h
 namespace Sailing {
 
     void init() {
-        // All file setup is handled by Utility::init(). This function is a
-        // required part of the module lifecycle, called by main.
         std::cout << "MODEL/Sailing: Initialized." << std::endl;
     }
 
     void shutdown() {
-        // All file shutdown is handled by Utility::shutdown().
         std::cout << "MODEL/Sailing: Shut down." << std::endl;
     }
 
-    std::optional<SailingEntity> getSailing(const std::string& sailingID) {
-        int position = 0;
-        while (true) {
-            // Read each record sequentially using the generic Utility function.
-            auto record = Utility::readRecord<SailingEntity>(position);
-            if (!record.has_value()) {
-                return {}; // Reached end of file, sailing not found.
+    // Internal helper function to find a record's position.
+    namespace {
+        int findRecordPosition(const std::string& sailingID) {
+            int position = 0;
+            while (true) {
+                auto record = Utility::readRecord<SailingEntity>(position);
+                if (!record.has_value()) return -1;
+                if (strcmp(record->sailingID, sailingID.c_str()) == 0) return position;
+                position++;
             }
-            // Use strcmp for comparing C-style char arrays.
-            if (strcmp(record->sailingID, sailingID.c_str()) == 0) {
-                return record; // Found the matching sailing.
-            }
-            position++;
         }
+    }
+
+    std::optional<SailingEntity> getSailing(const std::string& sailingID) {
+        int position = findRecordPosition(sailingID);
+        return (position != -1) ? Utility::readRecord<SailingEntity>(position) : std::nullopt;
     }
 
     bool isValidSailing(const std::string& sailingID) {
-        // A sailing is considered valid if the getSailing function finds it.
-        return getSailing(sailingID).has_value();
+        return findRecordPosition(sailingID) != -1;
     }
 
     void createSailing(const std::string& vesselID, const std::string& sailingID) {
-        // A sailing's initial capacity is based on its assigned vessel.
         auto vesselOpt = Vessel::getVessel(vesselID);
         if (!vesselOpt.has_value()) {
-            // Cannot create a sailing without a valid vessel.
-            std::cerr << "ERROR: Attempted to create sailing for non-existent vessel '" << vesselID << "'" << std::endl;
+            std::cerr << "ERROR: Cannot create sailing for non-existent vessel '" << vesselID << "'" << std::endl;
             return;
         }
         
-        SailingEntity newSailing = {}; // Zero-initialize the struct
+        SailingEntity newSailing = {};
         strncpy(newSailing.sailingID, sailingID.c_str(), 20);
-        newSailing.sailingID[20] = '\0'; // Ensure null termination
+        newSailing.sailingID[20] = '\0';
         strncpy(newSailing.vesselID, vesselID.c_str(), 20);
         newSailing.vesselID[20] = '\0';
-        
-        // Copy the vessel's max capacity as the initial remaining capacity.
         newSailing.LRL = vesselOpt->LCLL;
         newSailing.HRL = vesselOpt->HCLL;
 
-        // Use the generic Utility function to write the new record to the file.
         Utility::createRecord(newSailing);
     }
 
     void deleteSailing(const std::string& sailingID) {
-        // The Utility::deleteRecord function your team wrote requires the whole object.
-        auto sailingOpt = getSailing(sailingID);
-        if (sailingOpt.has_value()) {
-            SailingEntity toDelete = *sailingOpt;
-            Utility::deleteRecord(toDelete);
+        int position = findRecordPosition(sailingID);
+        if (position != -1) {
+            // THE FIX IS HERE: Call deleteRecord with the integer position.
+            Utility::deleteRecord<SailingEntity>(position);
         } else {
             std::cerr << "ERROR: Attempted to delete non-existent sailing '" << sailingID << "'" << std::endl;
         }
     }
 
+    // Internal helper for updating capacity.
     namespace {
         void updateCapacity(const std::string& sailingID, double lrlChange, double hrlChange) {
-            auto recordOpt = getSailing(sailingID);
-            if (recordOpt.has_value()) {
-                SailingEntity updatedRecord = *recordOpt;
-                updatedRecord.LRL += lrlChange;
-                updatedRecord.HRL += hrlChange;
-                Utility::updateRecord(updatedRecord);
+            int position = findRecordPosition(sailingID);
+            if (position != -1) {
+                if (auto recordOpt = getSailing(sailingID)) {
+                    SailingEntity updatedRecord = *recordOpt;
+                    updatedRecord.LRL += lrlChange;
+                    updatedRecord.HRL += hrlChange;
+                    // THE FIX IS HERE: Call updateRecord with position and object.
+                    Utility::updateRecord(position, updatedRecord);
+                }
             }
         }
     }
@@ -116,16 +112,13 @@ namespace Sailing {
 
     std::vector<SailingEntity> getSailings(int offset) {
         std::vector<SailingEntity> allSailings;
-        int position = offset; // Start reading from the specified offset.
+        int position = offset;
         while (true) {
             auto record = Utility::readRecord<SailingEntity>(position);
-            if (!record.has_value()) {
-                break; // End of file
-            }
+            if (!record.has_value()) break;
             allSailings.push_back(*record);
             position++;
         }
         return allSailings;
     }
-
-} 
+}
