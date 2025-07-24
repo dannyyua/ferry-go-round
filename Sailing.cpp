@@ -1,4 +1,4 @@
-// Sailing.cpp (FINAL CORRECTED VERSION)
+// Sailing.cpp 
 //******************************************************************
 // IMPLEMENTATION FILE: Sailing
 //
