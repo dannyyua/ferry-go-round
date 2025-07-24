@@ -18,6 +18,7 @@
 #include "Reservation.h"
 #include <cstring>
 #include <vector>
+#include <stdexcept>
 
 using namespace Reservation;
 using namespace Utility;
@@ -31,8 +32,16 @@ void Reservation::shutdown() {}
 void Reservation::createReservation(const std::string& reservationInfo) {
     // Parse reservation info
     size_t pos = reservationInfo.find(',');
+    if (pos == std::string::npos) {
+        throw std::invalid_argument("Invalid reservation info format");
+    }
     std::string sailID = reservationInfo.substr(0, pos);
     std::string plate = reservationInfo.substr(pos + 1);
+    
+    // Validate input lengths
+    if (sailID.length() > 20 || plate.length() > 20) {
+        throw std::invalid_argument("Sailing ID or vehicle plate exceeds maximum length");
+    }
     
     // Create entity
     ReservationEntity newEntity;
