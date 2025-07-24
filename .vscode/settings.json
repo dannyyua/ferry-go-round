@@ -57,8 +57,11 @@
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "files.associations": {
+    "*.py": "python",
     "vector": "cpp",
     "string": "cpp",
-    "iostream": "cpp"
-  }
+    "iostream": "cpp",
+    "string_view": "cpp"
+  },
+  "C_Cpp.default.compilerPath": "C:/MinGW/bin/g++.exe"
 }

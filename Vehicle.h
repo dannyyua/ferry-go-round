@@ -20,6 +20,7 @@
 #define VEHICLE_H
 
 #include <string>
+#include <cstring>
 #include "Utility.h"
 
 namespace Vehicle {

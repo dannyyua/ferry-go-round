@@ -51,7 +51,16 @@ void Reservation::cancelReservation(const std::string& sailingID,
     strncpy(searchEntity.vehiclePlate, vehiclePlate.c_str(), 20);
     
     // Delete via Utility
-    deleteRecord(searchEntity);
+   int position = 0;
+    while (true) {
+        auto record = Utility::readRecord<ReservationEntity>(position);
+        if (!record.has_value()) break;
+        if (*record == searchEntity) {
+            Utility::deleteRecord<ReservationEntity>(position);
+            return;
+        }
+        position++;
+    }
 }
 
 void Reservation::deleteReservations(const std::string& sailingID) {
@@ -71,7 +80,7 @@ void Reservation::deleteReservations(const std::string& sailingID) {
     
     // Delete found records
     for (auto& entity : toDelete) {
-        deleteRecord(entity);
+        Utility::deleteRecord<ReservationEntity>(position);
     }
 }
 
@@ -99,7 +108,7 @@ void Reservation::checkIn(const std::string& vehiclePlate) {
             // Update and save
             ReservationEntity updated = *record;
             updated.checkedIn = true;
-            updateRecord(updated);
+            Utility::updateRecord<ReservationEntity>(position, updated);
             return;
         }
         position++;
