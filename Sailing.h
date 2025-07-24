@@ -1,4 +1,4 @@
-// Sailing.h (FINAL CORRECTED VERSION)
+// Sailing.h
 //******************************************************************
 // DEFINITION MODULE: Sailing
 //
