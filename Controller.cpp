@@ -75,11 +75,21 @@ namespace Controller {
     }
 
     void Controller::createNewReservation(const std::string& sailingID, const std::string& vehiclePlate) {
-        auto vehicle = getVehicle(vehiclePlate);
-
-        //TODO: figure out HRL and LRL stuff
-
         Reservation::createReservation(sailingID, vehiclePlate);
+
+        auto vehicle = getVehicle(vehiclePlate);
+        auto sailing = getSailing(sailingID);
+
+        // Assume 4.5m for regular vehicles, include 0.5m buffer
+        double vehicleLength = (vehicle.length > 0 ? vehicle.length : 4.5) + 0.5;
+        double vehicleHeight = vehicle.height;
+
+        // Decrease HRL if special vehicle or LRL is full, otherwise decrease LRL
+        if (vehicleHeight > 2.0 || vehicleLength > 7.0 || sailing.LRL < vehicleLength) {
+            Sailing::decreaseHRL(sailingID, vehicleLength);
+        } else {
+            Sailing::decreaseLRL(sailingID, vehicleLength);
+        }
     }
 
     void Controller::createNewVehicle(const std::string& vehiclePlate, const std::string& phoneNumber, double length, double height) {
@@ -87,11 +97,25 @@ namespace Controller {
     }
 
     void Controller::cancelReservation(const std::string& sailingID, const std::string& vehiclePlate) {
-        //TODO: figure out HRL and LRL stuff
+        Reservation::cancelReservation(sailingID, vehiclePlate);
+
+        auto vehicle = getVehicle(vehiclePlate);
+
+        double vehicleLength = (vehicle.length > 0 ? vehicle.length : 4.5) + 0.5;
+        double vehicleHeight = vehicle.height;
+
+        // Increase HRL/LRL depending on vehicle type
+        // TODO: Consider case when regular vehicle is put into HRL lane
+        // May need to store lane type in Reservation
+        if (vehicleHeight > 2.0 || vehicleLength > 7.0) {
+            Sailing::increaseHRL(sailingID, vehicleLength);
+        } else {
+            Sailing::increaseLRL(sailingID, vehicleLength);
+        }
     }
 
     void Controller::checkInVehicle(const std::string& vehiclePlate) {
-        //TODO: figure out HRL and LRL stuff
+        Reservation::checkIn(vehiclePlate);
     }
 
     void Controller::deleteSailing(const std::string& sailingID) {
@@ -107,9 +131,5 @@ namespace Controller {
 
     Sailing::SailingEntity Controller::queryIndividualSailing(const std::string& sailingID) {
         return getSailing(sailingID); // Might be redundant
-    }
-
-    void Controller::printSailingReport() {
-        // Might not need this
     }
 }

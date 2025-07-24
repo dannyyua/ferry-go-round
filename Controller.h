@@ -77,8 +77,6 @@ namespace Controller {
     std::vector<Sailing::SailingEntity> getSailingReport(int offset);
     //-----------
     Sailing::SailingEntity queryIndividualSailing(const std::string& sailingID);
-    //-----------
-    void printSailingReport();
 }
 
 #endif // CONTROLLER_H
