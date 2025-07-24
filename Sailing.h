@@ -3,63 +3,55 @@
 // DEFINITION MODULE: Sailing
 //
 // PURPOSE:          The data model for sailings. Declares the functions
-//                   for all sailing-related data operations, abstracting
-//                   the underlying data source.
+//                   for all sailing-related data operations and defines
+//                   the SailingEntity structure for persistent storage.
 //
 // (* Revision History:
-//   Rev. 1.0 - 2025/07/07
-//   Rev. 1.1 - 2025/07/08 
-//     - Add 3 Capacity functions (check if exist, decrease capacity, increase capacity)
+//   Rev. 1.2 - 2025/07/23 - Final version to align with Utility module
 // *)
 //******************************************************************
 #ifndef SAILING_H
 #define SAILING_H
 
 #include <string>
-#include <vector> // Often used for returning multiple records
+#include <vector>
+#include <optional>
+#include <cstring> // For strcmp
 
-// The Sailing namespace acts as a static class for managing Sailing data.
 namespace Sailing {
-    //-----------
+
+    // Entity structure for persistent, fixed-length binary storage.
+    #pragma pack(push, 1)
+    struct SailingEntity {
+        char sailingID[21];
+        char vesselID[21];
+        double LRL;
+        double HRL;
+        
+        // Equality operator is required by the Utility::deleteRecord function.
+        bool operator==(const SailingEntity& other) const {
+            return strcmp(sailingID, other.sailingID) == 0;
+        }
+    };
+    #pragma pack(pop)
+
+    //----------- Lifecycle Interface -----------
     void init();
-    //-----------
     void shutdown();
 
-    //-----------
-    // Corresponds to Sailing management from OCD"
-    bool hasCapacity(const std::string& sailingID, float requiredLength);
-    //-----------
-    // Decrease in lane capacity
-    void decreaseLRL(const std::string& sailingID, float length);
-    //-----------
-    // Increase in lane capacity
-    void increaseLRL(const std::string& sailingID, float length);
-    //-----------
-    // Decrease in lane capacity
-    void decreaseHRL(const std::string& sailingID, float length);
-    //-----------
-    // Increase in lane capacity
-    void increaseHRL(const std::string& sailingID, float length);
-
-    //-----------
-    // Corresponds to OCD "createSailing()".
-    void createSailing(const std::string& sailingInfo);
-
-    //-----------
-    // Corresponds to OCD "deleteSailing()".
+    //----------- Data Manipulation & Query Interface -----------
+    bool isValidSailing(const std::string& sailingID);
+    void createSailing(const std::string& vesselID, const std::string& sailingID);
     void deleteSailing(const std::string& sailingID);
     
-    //-----------
-    // Corresponds to OCD "isValidSailing()".
-    bool isValidSailing(const std::string& sailingID);
+    std::optional<SailingEntity> getSailing(const std::string& sailingID);
+    std::vector<SailingEntity> getSailings(int offset);
 
-    //-----------
-    // Corresponds to OCD "getSailings()". In a real app, this would return data.
-    void getSailings(int offset);
-
-    //-----------
-    // Corresponds to OCD "getSailing()".
-    void getSailing(const std::string& sailingID);
+    //----------- Capacity Management Interface -----------
+    void decreaseLRL(const std::string& sailingID, double length);
+    void increaseLRL(const std::string& sailingID, double length);
+    void decreaseHRL(const std::string& sailingID, double length);
+    void increaseHRL(const std::string& sailingID, double length);
 }
 
 #endif // SAILING_H
