@@ -1,13 +1,11 @@
-// Vessel.h
+// Vessel.h (CORRECTED)
 //******************************************************************
 // DEFINITION MODULE: Vessel
 //
-// PURPOSE:          The data model for vessels. Declares the functions
-//                   for initializing, shutting down, creating, and
-//                   validating vessel data, representing the interface
-//                   to the vessel "database table".
+// PURPOSE:          The data model for vessels.
 //
 // (* Revision History:
+//   Rev. 1.1 - 2025/07/23 - Changed VesselEntity to use fixed-size char array for binary I/O.
 //   Rev. 1.0 - 2025/07/07
 // *)
 //******************************************************************
@@ -16,39 +14,31 @@
 
 #include <string>
 #include <optional>
+#include <cstring> // Required for strcmp
 
-// The Vessel namespace acts as a static class for managing Vessel data.
 namespace Vessel {
-    // Domain entity representing a Vessel.
+    // This struct MUST use Plain Old Data (POD) types for binary file I/O.
+    // std::string is not a POD type.
+    #pragma pack(push, 1)
     struct VesselEntity {
-        std::string vesselID;
+        char vesselID[21]; // Use a fixed-size char array instead of std::string
         double LCLL;
         double HCLL;
 
+        // Equality operator for Utility functions
         bool operator==(const VesselEntity& other) const {
-            return vesselID == other.vesselID;
+            return strcmp(vesselID, other.vesselID) == 0;
         }
     };
+    #pragma pack(pop)
 
-    //-----------
-    void init(); // Initializes the vessel data source.
-    //-----------
-    void shutdown(); // Shuts down the vessel data source.
-
-    //-----------
-    // Corresponds to OCD "createVessel()".
-    // Creates a new vessel record in the database.
+    void init();
+    void shutdown();
     void createVessel(const std::string& vesselID, double LCLL, double HCLL);
-
-    //-----------
-    // Corresponds to OCD "getVessel()".
-    // Retrieves a vessel record by its ID.
     std::optional<VesselEntity> getVessel(const std::string& vesselID);
-
-    //-----------
-    // Corresponds to OCD "isValidVessel()".
-    // Checks if a vessel with the given ID exists in the database.
     bool isValidVessel(const std::string& vesselID);
+    // Added for the unit test
+    void deleteVessel(const std::string& vesselID);
 }
 
-#endif // VESSEL_H
+#endif 
