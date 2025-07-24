@@ -47,13 +47,13 @@ namespace Controller {
 
     // --- Data Retrieval Functions (for displaying info in the UI) ---
     //-----------
-    Vessel::VesselEntity getVessel(const std::string& vesselID);
+    std::optional<Vessel::VesselEntity> getVessel(const std::string& vesselID);
     //-----------
-    Sailing::SailingEntity getSailing(const std::string& sailingID);
+    std::optional<Sailing::SailingEntity> getSailing(const std::string& sailingID);
     //-----------
-    Reservation::ReservationEntity getReservation(const std::string& vehiclePlate);
+    std::optional<Reservation::ReservationEntity> getReservation(const std::string& vehiclePlate);
     //-----------
-    Vehicle::VehicleEntity getVehicle(const std::string& vehiclePlate);
+    std::optional<Vehicle::VehicleEntity> getVehicle(const std::string& vehiclePlate);
 
     // --- Use Case Functions (from specific OCDs) ---
     //-----------
