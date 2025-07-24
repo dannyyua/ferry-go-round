@@ -66,20 +66,19 @@ namespace Utility {
     // Reads a single record from a specific 0-indexed position.
     template <typename T>
     std::optional<T> readRecord(int position) {
-        std::string path = getFilePath<T>();
-        std::ifstream file(path, std::ios::binary);
-        if (!file) return {}; // File doesn't exist yet, return empty optional.
+    std::string path = getFilePath<T>();
+    std::ifstream file(path, std::ios::binary);
+    if (!file) return {}; // File doesn't exist yet, return empty optional.
 
-        file.seekg(position * sizeof(T), std::ios::beg);
-        T record;
-        file.read(reinterpret_cast<char*>(&record), sizeof(T));
+    file.seekg(position * sizeof(T), std::ios::beg);
+    T record;
+    file.read(reinterpret_cast<char*>(&record), sizeof(T));
 
-        if (file.gcount() < sizeof(T)) {
-            return {}; // Didn't read a full record (most likely end of file).
-        }
-        return record;
+    if (static_cast<size_t>(file.gcount()) < sizeof(T)) { // 修改这一行
+        return {}; // Didn't read a full record (most likely end of file).
     }
-
+    return record;
+}
     // Updates a record at a specific 0-indexed position by overwriting it.
     template <typename T>
     void updateRecord(int position, const T& object) {

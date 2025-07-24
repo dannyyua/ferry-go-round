@@ -19,6 +19,7 @@
 
 #include <string>
 #include <optional>
+#include <cstring> // For strcmp
 #include "Utility.h"
 
 namespace Reservation {
