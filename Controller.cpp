@@ -77,8 +77,8 @@ namespace Controller {
     void Controller::createNewReservation(const std::string& sailingID, const std::string& vehiclePlate) {
         Reservation::createReservation(sailingID, vehiclePlate);
 
-        auto vehicle = getVehicle(vehiclePlate);
-        auto sailing = getSailing(sailingID);
+        auto vehicle = getVehicle(vehiclePlate).value();
+        auto sailing = getSailing(sailingID).value();
 
         // Assume 4.5m for regular vehicles, include 0.5m buffer
         double vehicleLength = (vehicle.length > 0 ? vehicle.length : 4.5) + 0.5;
@@ -99,7 +99,7 @@ namespace Controller {
     void Controller::cancelReservation(const std::string& sailingID, const std::string& vehiclePlate) {
         Reservation::cancelReservation(sailingID, vehiclePlate);
 
-        auto vehicle = getVehicle(vehiclePlate);
+        auto vehicle = getVehicle(vehiclePlate).value();
 
         double vehicleLength = (vehicle.length > 0 ? vehicle.length : 4.5) + 0.5;
         double vehicleHeight = vehicle.height;
@@ -130,6 +130,6 @@ namespace Controller {
     }
 
     Sailing::SailingEntity Controller::queryIndividualSailing(const std::string& sailingID) {
-        return getSailing(sailingID); // Might be redundant
+        return getSailing(sailingID).value(); // Might be redundant
     }
 }
