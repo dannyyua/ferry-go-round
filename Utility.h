@@ -1,4 +1,4 @@
-// Utility.h (CORRECTED AND RE-ENGINEERED)
+// Utility.h
 //******************************************************************
 // DEFINITION MODULE: Utility
 //
