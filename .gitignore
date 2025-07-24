@@ -41,4 +41,7 @@
 *.dwo
 
 # Data files
-Data/*
+Data/Reservations
+Data/Vehicles
+Data/Sailings
+Data/Vessels
