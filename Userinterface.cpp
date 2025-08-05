@@ -77,7 +77,7 @@ namespace UserInterface {
                         vesselID = userInput;
                     }
                 }
-                cout << "\nEnter High Ceiling Lane Length (HCLL) in meters (0.1 - 999.9) [or 0 to return to main menu]: ";
+                cout << "\nEnter High Ceiling Lane Length (HCLL) in meters (1 - 3600) [or 0 to return to main menu]: ";
                 userInput = "";
                 validInput = false;
                 double hcll = 0.0;
@@ -88,13 +88,13 @@ namespace UserInterface {
                     } else {
                         bool validDouble = tryParseDouble(userInput, hcll);
                         if (!validDouble) {
-                            cout << "\nInvalid HCLL. Please enter a number between 0.1 and 999.9 [or 0 to return to main menu]: ";
+                            cout << "\nInvalid HCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
                             cin.clear(); 
                             cin.ignore(10000, '\n');
                             continue;
                         } else {
-                            if (hcll < 0.1 || hcll > 999.9) {
-                                cout << "\nInvalid HCLL. Please enter a number between 0.1 and 999.9 [or 0 to return to main menu]: ";
+                            if (hcll < 1 || hcll > 3600) {
+                                cout << "\nInvalid HCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
                                 continue;
                             } else {
                                 validInput = true;
@@ -102,7 +102,7 @@ namespace UserInterface {
                         }
                     }
                 }
-                cout << "\nEnter Low Ceiling Lane Length (LCLL) in meters (0.1 - 999.9) [or 0 to return to main menu]: ";
+                cout << "\nEnter Low Ceiling Lane Length (LCLL) in meters (1 - 3600) [or 0 to return to main menu]: ";
                 userInput = "";
                 validInput = false;
                 double lcll = 0.0;
@@ -113,13 +113,13 @@ namespace UserInterface {
                     } else {
                         bool validDouble = tryParseDouble(userInput, lcll);
                         if (!validDouble) {
-                            cout << "\nInvalid LCLL. Please enter a number between 0.1 and 999.9 [or 0 to return to main menu]: ";
+                            cout << "\nInvalid LCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
                             cin.clear(); 
                             cin.ignore(10000, '\n');
                             continue;
                         } else {
-                            if (lcll < 0.1 || lcll > 999.9) {
-                                cout << "\nInvalid LCLL. Please enter a number between 0.1 and 999.9 [or 0 to return to main menu]: ";
+                            if (lcll < 1 || lcll > 3600) {
+                                cout << "\nInvalid LCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
                                 continue;
                             } else {
                                 validInput = true;
@@ -274,7 +274,7 @@ namespace UserInterface {
                     } else {
                         if (userInput == "y" || userInput == "Y") {
                             Controller::deleteSailing(sailingID);
-                            cout << "\nSailing \"" << sailingID << "\" has been deleted."
+                            cout << "\nSailing \"" << sailingID << "\" has been deleted. Reservations associated with this sailing have also been deleted."
                                 << "\nReturning to main menu...\n";
                             validInput = true;
                             return;
@@ -328,19 +328,6 @@ namespace UserInterface {
                         sailingID = userInput;
                     }
                 }
-                cout << "\nEnter customer phone number [or 0 to return to main menu]: ";
-                userInput = "";
-                validInput = false;
-                string phoneNumber;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    } else {
-                        phoneNumber = userInput;
-                        validInput = true;
-                    }
-                }
                 cout << "\nEnter vehicle license plate [or 0 to return to main menu]: ";
                 userInput = "";
                 validInput = false;
@@ -361,6 +348,19 @@ namespace UserInterface {
                 string heightInput;
                 string lengthInput; 
                 if (!Controller::checkVehicleExists(licensePlate)) {
+                    cout << "\nEnter customer phone number [or 0 to return to main menu]: ";
+                    userInput = "";
+                    validInput = false;
+                    string phoneNumber;
+                    while (!validInput) {
+                        cin >> userInput;
+                        if (userInput == "0") {
+                            return;
+                        } else {
+                            phoneNumber = userInput;
+                            validInput = true;
+                        }
+                    }
                     bool validheight = false;                                             
                     cout << "\nEnter vehicle height in meters (0.1 - 9.9) [or 0 to return to main menu]: ";
                     while (!validheight) {
