@@ -40,120 +40,124 @@ namespace UserInterface {
     // Vessel Management
     static void handleVesselManagement() {
         while (true) {
-            cout<<"\n============== Vessel Management ==============\n"
-                <<"1) Create New Vessel Record\n"
-                <<"0) Return to main menu\n"
-                <<"\nEnter selection ";
+            cout << "\n============== Vessel Management ==============\n"
+                 << "1) Create New Vessel Record\n"
+                 << "0) Return to main menu\n"
+                 << "\nEnter selection: ";
 
-            int choice; 
-            if (!(cin >> choice)) { 
-                cin.clear(); 
-                cin.ignore(10000, '\n'); 
-                cout << "\nInvalid choice, please try again...\n";
-                continue; 
+            string choice_input;
+            // Use getline to read the menu choice to avoid input buffer issues later
+            getline(cin, choice_input); 
+            int choice = -1;
+            try {
+                choice = stoi(choice_input); // Convert the string to a number
+            } catch (...) {
+                cout << "\nInvalid choice, please enter a number.\n";
+                continue;
             }
-            
+
             if (choice == 0) {
-                return;
+                return; // Exit to the previous menu
             }   
             
             if (choice == 1) {
                 cout << "\n====== CREATE NEW VESSEL RECORD ======\n";
                 
-                cout << "\nEnter Vessel ID (max 20 chars) [or 0 to return to main menu]: ";
-                string userInput;
-                bool validInput = false;
                 string vesselID;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
+                while (true) {
+                    cout << "Enter Vessel ID (max 20 chars) [or 0 to return]: ";
+                    // Use getline to correctly read names with spaces
+                    getline(cin, vesselID);
+
+                    if (vesselID == "0") {
+                        // User chose to cancel, break the inner loop
+                        break; 
                     }
-                    if (Controller::checkVesselExists(userInput)) {
-                        cout << "\nError: Vessel ID \"" << userInput << "\" already exists.\n"
-                            << "Please enter a different ID or [0 to return to main menu]: ";
-                    } else {
-                        validInput = true;
-                        vesselID = userInput;
+                    if (vesselID.empty()) {
+                        cout << "\nError: Vessel ID cannot be empty.\n";
+                        continue;
                     }
+                    if (vesselID.length() > 20) {
+                        cout << "\nError: Vessel ID cannot be longer than 20 characters.\n";
+                        continue;
+                    }
+                    if (Controller::checkVesselExists(vesselID)) {
+                        cout << "\nError: Vessel ID \"" << vesselID << "\" already exists.\n";
+                        continue;
+                    }
+                    
+                    // If all checks pass, the input is valid.
+                    break;
                 }
-                cout << "\nEnter High Ceiling Lane Length (HCLL) in meters (1 - 3600) [or 0 to return to main menu]: ";
-                userInput = "";
-                validInput = false;
-                double hcll = 0.0;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    } else {
-                        bool validDouble = tryParseDouble(userInput, hcll);
-                        if (!validDouble) {
-                            cout << "\nInvalid HCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
-                            cin.clear(); 
-                            cin.ignore(10000, '\n');
-                            continue;
-                        } else {
-                            if (hcll < 1 || hcll > 3600) {
-                                cout << "\nInvalid HCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
-                                continue;
-                            } else {
-                                validInput = true;
-                            }
-                        }
-                    }
-                }
-                cout << "\nEnter Low Ceiling Lane Length (LCLL) in meters (1 - 3600) [or 0 to return to main menu]: ";
-                userInput = "";
-                validInput = false;
-                double lcll = 0.0;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    } else {
-                        bool validDouble = tryParseDouble(userInput, lcll);
-                        if (!validDouble) {
-                            cout << "\nInvalid LCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
-                            cin.clear(); 
-                            cin.ignore(10000, '\n');
-                            continue;
-                        } else {
-                            if (lcll < 1 || lcll > 3600) {
-                                cout << "\nInvalid LCLL. Please enter a number between 1 and 3600 [or 0 to return to main menu]: ";
-                                continue;
-                            } else {
-                                validInput = true;
-                            }
-                        }
-                    }
-                }
-                cout << "\nYou entered the following:\n"
-                    << "\n  Vessel ID: " << vesselID
-                    << "\n  HCLL: " << hcll << " m"
-                    << "\n  LCLL: " << lcll << " m";
                 
-                userInput = "";
-                validInput = false;
-                while (!validInput) {
-                    cout << "\nConfirm creation of this vessel? (Y/N): ";
-                    cin >> userInput;
-                    if (userInput == "n" || userInput == "N") {
-                        cout << "\nOperation cancelled. Restarting vessel creation process...\n";
-                        validInput = true;
+                // If user entered '0' in the previous step, return to the vessel menu
+                if (vesselID == "0") {
+                    cout << "\nOperation cancelled.\n";
+                    continue; 
+                }
+
+                double hcll;
+                while (true) {
+                    cout << "Enter High Ceiling Lane Length (HCLL) in meters (1.0 - 3600.0) [or 0 to return]: ";
+                    string input;
+                    getline(cin, input);
+                    if (input == "0") {
+                        hcll = 0.0; // Signal cancellation
+                        break;
+                    }
+                    if (tryParseDouble(input, hcll) && hcll >= 1.0 && hcll <= 3600.0) {
+                        break; // Valid input
                     } else {
-                        if (userInput == "y" || userInput == "Y") {
-                            Controller::createNewVessel(vesselID, lcll, hcll);
-                            cout << "\nNew vessel \"" << vesselID << "\" has been successfully created."
-                                << "\nReturning to main menu...\n";
-                            validInput = true;
-                            return;
-                        } else {
-                            cout << "\nInvalid choice, please try again...";
-                            cin.clear(); 
-                            cin.ignore(10000, '\n');
-                        }
+                        cout << "\nInvalid input. Please enter a number in the specified range.\n";
                     }
                 }
+                if (hcll == 0.0) {
+                    cout << "\nOperation cancelled.\n";
+                    continue;
+                }
+
+                double lcll;
+                while (true) {
+                    cout << "Enter Low Ceiling Lane Length (LCLL) in meters (1.0 - 3600.0) [or 0 to return]: ";
+                    string input;
+                    getline(cin, input);
+                    if (input == "0") {
+                        lcll = 0.0; // Signal cancellation
+                        break;
+                    }
+                    if (tryParseDouble(input, lcll) && lcll >= 1.0 && lcll <= 3600.0) {
+                        break; // Valid input
+                    } else {
+                        cout << "\nInvalid input. Please enter a number in the specified range.\n";
+                    }
+                }
+                if (lcll == 0.0) {
+                    cout << "\nOperation cancelled.\n";
+                    continue;
+                }
+
+                cout << "\nYou entered the following:\n"
+                     << "  Vessel ID: " << vesselID << "\n"
+                     << "  HCLL: " << fixed << setprecision(1) << hcll << " m\n"
+                     << "  LCLL: " << fixed << setprecision(1) << lcll << " m";
+                
+                string confirmation;
+                while (true) {
+                    cout << "\nConfirm creation of this vessel? (Y/N): ";
+                    getline(cin, confirmation);
+                    if (confirmation == "y" || confirmation == "Y") {
+                        Controller::createNewVessel(vesselID, lcll, hcll);
+                        cout << "\nNew vessel \"" << vesselID << "\" has been successfully created.\n";
+                        break; 
+                    } else if (confirmation == "n" || confirmation == "N") {
+                        cout << "\nOperation cancelled.\n";
+                        break;
+                    } else {
+                        cout << "\nInvalid choice, please enter Y or N.\n";
+                    }
+                }
+            } else {
+                cout << "\nInvalid selection. Please try again.\n";
             }
         }
     }
@@ -168,123 +172,118 @@ namespace UserInterface {
                 <<"\nEnter selection: ";
             
             int choice; 
-            if (!(cin >> choice)) { 
+            cin >> choice;
+            if (cin.fail()) { 
                 cin.clear(); 
-                cin.ignore(10000, '\n'); 
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
                 cout << "\nInvalid choice, please try again...\n";
                 continue; 
             }
+
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
             
             if (choice == 0) {
                 return;
             } 
-            if (choice == 1) {
+            else if (choice == 1) {
                 cout << "\n====== CREATE NEW SAILING ======\n";
                 
-                cout << "\nEnter vessel ID to assign sailings to [or 0 to return to main menu]: ";
-                string userInput;
-                bool validInput = false;
                 string vesselID;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    }
-                    if (!Controller::checkVesselExists(userInput)) {
-                        cout << "\nError: Vessel ID \"" << userInput << "\" does not exist.\n"
-                            << "Please enter a valid vessel ID or 0 to return to main menu: ";
+                while (true) {
+                    cout << "Enter vessel ID to assign sailings to [or 0 to return]: ";
+                    // FIX: Use getline to read the entire line, including spaces
+                    getline(cin, vesselID); 
+
+                    if (vesselID == "0") break; // Exit loop to cancel
+
+                    if (Controller::checkVesselExists(vesselID)) {
+                        break; // Valid vessel ID, proceed
                     } else {
-                        validInput = true;
-                        vesselID = userInput;
+                        cout << "\nError: Vessel ID \"" << vesselID << "\" does not exist.\n";
                     }
                 }
-                cout << "\nEnter new sailing ID in format ttt-dd-mm (e.g., YVR-21-06) [or 0 to return to main menu]: ";
-                userInput = "";
-                validInput = false;
+                if (vesselID == "0") {
+                    cout << "\nOperation cancelled.\n";
+                    continue; // Go back to sailing menu
+                }
+
                 string sailingID;
-                while (!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    }
-                    if (Controller::checkSailingExists(userInput)) {
-                        cout << "\nError: sailing ID \"" << userInput << "\" already exists.\n"
-                            << "Please enter a valid and unique ID [or 0 to return to main menu]: ";
+                while (true) {
+                    cout << "Enter new sailing ID (e.g., YVR-21-06) [or 0 to return]: ";
+                    getline(cin, sailingID); // FIX: Use getline
+                    if (sailingID == "0") break; // Exit loop to cancel
+
+                    if (Controller::checkSailingExists(sailingID)) {
+                        cout << "\nError: sailing ID \"" << sailingID << "\" already exists.\n";
+                    } else if (sailingID.empty()) {
+                        cout << "\nError: Sailing ID cannot be empty.\n";
                     } else {
-                        validInput = true;
-                        sailingID = userInput;
+                        break; // Valid sailing ID, proceed
                     }
                 }
+                if (sailingID == "0") {
+                    cout << "\nOperation cancelled.\n";
+                    continue;
+                }
+
                 cout << "\nYou entered the following:\n"
-                    << "\n  Vessel ID: " << vesselID 
-                    << "\n  Sailing ID: " << sailingID << "\n";
+                     << "  Vessel ID: " << vesselID << "\n"
+                     << "  Sailing ID: " << sailingID << "\n";
                 
-                userInput = "";
-                validInput = false;
-                while (!validInput) {
+                string confirmation;
+                while (true) {
                     cout << "\nConfirm creation of this sailing? (Y/N): ";
-                    cin >> userInput;
-                    if (userInput == "n" || userInput == "N") {
-                        cout << "\nOperation cancelled. Restarting sailing creation process...\n";
-                        validInput = true;
+                    getline(cin, confirmation); // FIX: Use getline
+                    if (confirmation == "n" || confirmation == "N") {
+                        cout << "\nOperation cancelled.\n";
+                        break; // Exit confirmation loop
+                    } else if (confirmation == "y" || confirmation == "Y") {
+                        Controller::createNewSailing(vesselID, sailingID);
+                        cout << "\nSailing \"" << sailingID << "\" has been successfully scheduled for vessel \""
+                             << vesselID << "\".\n";
+                        break; // Exit confirmation loop
                     } else {
-                        if (userInput == "y" || userInput == "Y") {
-                            Controller::createNewSailing(vesselID, sailingID);
-                            cout << "\nSailing \"" << sailingID << "\" has been successfully scheduled for vessel \""
-                                << vesselID << "\"."
-                                << "\nReturning to main menu...\n";
-                            validInput = true;
-                            return;
-                        } else {
-                            cout << "\nInvalid choice, please try again...";
-                            cin.clear(); 
-                            cin.ignore(10000, '\n');
-                        }
+                        cout << "\nInvalid choice, please enter Y or N.\n";
                     }
                 }
             }
-            if (choice == 2) {
-                cout << "\n====== Delete Sailing ======\n";
-                string userInput;
-                bool validInput = false;
+            else if (choice == 2) {
+                cout << "\n====== DELETE SAILING ======\n";
+                
                 string sailingID;
-                cout << "\nEnter sailing ID for deletion [or 0 to return to main menu]: ";
-                while(!validInput) {
-                    cin >> userInput;
-                    if (userInput == "0") {
-                        return;
-                    }
-                    if (!Controller::checkSailingExists(userInput)) {
-                        cout << "\nError: sailing ID " << userInput << " does not exist.\n";
-                        cout << "Enter sailing ID for deletion [or 0 to return to main menu]: ";
+                while(true) {
+                    cout << "Enter sailing ID for deletion [or 0 to return]: ";
+                    getline(cin, sailingID); // FIX: Use getline
+                    if (sailingID == "0") break;
+
+                    if (Controller::checkSailingExists(sailingID)) {
+                        break;
                     } else {
-                        validInput = true;
-                        sailingID = userInput;
+                        cout << "\nError: sailing ID \"" << sailingID << "\" does not exist.\n";
                     }
+                }
+                if (sailingID == "0") {
+                    cout << "\nOperation cancelled.\n";
+                    continue;
                 }
                 
-                userInput = "";
-                validInput = false;
-                while (!validInput) {
-                    cout << "\nYou are about to delete sailing ID: " << sailingID << ". Confirm action? (Y/N): ";
-                    cin >> userInput;
-                    if (userInput == "n" || userInput == "N") {
-                        cout << "\nOperation cancelled. Restarting deleting process...\n";
-                        validInput = true;
+                string confirmation;
+                while (true) {
+                    cout << "\nYou are about to delete sailing ID: " << sailingID << ". This will also delete all associated reservations. Confirm action? (Y/N): ";
+                    getline(cin, confirmation); // FIX: Use getline
+                    if (confirmation == "n" || confirmation == "N") {
+                        cout << "\nOperation cancelled.\n";
+                        break;
+                    } else if (confirmation == "y" || confirmation == "Y") {
+                        Controller::deleteSailing(sailingID);
+                        cout << "\nSailing \"" << sailingID << "\" has been deleted.\n";
+                        break;
                     } else {
-                        if (userInput == "y" || userInput == "Y") {
-                            Controller::deleteSailing(sailingID);
-                            cout << "\nSailing \"" << sailingID << "\" has been deleted. Reservations associated with this sailing have also been deleted."
-                                << "\nReturning to main menu...\n";
-                            validInput = true;
-                            return;
-                        } else {
-                            cout << "\nInvalid choice, please try again...\n";
-                            cin.clear(); 
-                            cin.ignore(10000, '\n');
-                        }
+                        cout << "\nInvalid choice, please enter Y or N.\n";
                     }
                 }
+            } else {
+                 cout << "\nInvalid selection. Please try again.\n";
             }
         }
     }
@@ -502,7 +501,8 @@ namespace UserInterface {
                         validInput = true;
                     } else {
                         if (userInput == "y" || userInput == "Y") {
-                            Controller::deleteSailing(sailingID);
+                            //Controller::deleteSailing(sailingID);
+                            Controller::cancelReservation(sailingID, licensePlate);
                             cout << "\nReservation for vehicle " << licensePlate <<" has been cancelled."
                                  << "\nRemaining capacity updated.\n" 
                                  << "\nReturning to main menu...\n";
@@ -662,10 +662,16 @@ namespace UserInterface {
                 <<"Select: ";
 
             int choice; 
-            if (!(cin >> choice)) {  
-                cout << "\nInvalid choice, please try again...\n";
+            cin >> choice;
+            if (cin.fail()) {  
+                cout << "\nInvalid choice. Please enter a number.\n";
+                // Clear the error state from cin
+                cin.clear(); 
+                // Discard the rest of the invalid input line
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
                 continue; 
             }
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             if (choice == 0) { 
                 Controller::shutdown(); 
                 return;
